@@ -1,0 +1,39 @@
+name: Build iOS Dylib
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Theos and Dependencies
+        run: |
+          brew install ldid xz
+          export THEOS=~/theos
+          git clone --recursive https://github.com/theos/theos.git $THEOS
+          curl -sL https://github.com/theos/sdks/archive/master.tar.gz | tar -xz -C $THEOS/sdks --strip-components=1
+
+      - name: Compile Dylib
+        run: |
+          export THEOS=~/theos
+          make clean
+          make package FINALPACKAGE=1
+
+      - name: Prepare Dylib Artifact
+        run: |
+          mkdir -p output
+          find .theos/obj -name "*.dylib" -exec cp {} output/ \;
+          ls -la output/
+
+      - name: Upload Compiled Dylib
+        uses: actions/upload-artifact@v4
+        with:
+          name: HorrorfieldMod-Dylib
+          path: output/*.dylib
