@@ -1,0 +1,10 @@
+Package: com.mod.horrorfield
+Name: HorrorfieldMod
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Ad-Block and High Camera View for Horrorfield (Non-JB)
+Maintainer: Developer
+Author: Developer
+Section: Tweaks
+Depends: mobilesubstrate (>= 0.9.5000)
+
